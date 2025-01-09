@@ -1,7 +1,7 @@
 <p align="center">
 </p>
 
-<h2>Cisco Packet Tracer |  Hotel Topology<h2>
+<h1>Cisco Packet Tracer |  Hotel Topology<h1>
   
 This report outlines the design and implementation of a network topology to support a main campus and a smaller campus. The network will serve various departments, faculties, and labs, ensuring efficient communication, security, and scalability. Both campuses will be interconnected, with an external cloud-hosted email server integrated into the network.
 
