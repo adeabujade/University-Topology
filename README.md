@@ -1,7 +1,7 @@
 <p align="center">
 </p>
 
-<h1>Cisco Packet Tracer |  Hotel Topology<h1>
+<h1>Cisco Packet Tracer |  University Topology<h1>
   
 This report outlines the design and implementation of a network topology to support a main campus and a smaller campus. The network will serve various departments, faculties, and labs, ensuring efficient communication, security, and scalability. Both campuses will be interconnected, with an external cloud-hosted email server integrated into the network.
 
@@ -33,9 +33,9 @@ Building A: Administrative Staff and Faculty of Business
   
 Departments: Management, HR, Finance, and the Faculty of Business.
 
-Network Configuration:
+Network VLANs:
 
-Devices will be assigned to separate VLANs for each department and the Faculty of Business.
+Devices will be assigned to separate VLANs for each department and the Faculty of Business. Separate IP networks will be assigned to each faculty. Switches will be configured with VLANs for traffic segmentation.
 
 VLANs:
 
@@ -47,41 +47,37 @@ VLAN 30: Finance
 
 VLAN 40: Business
 
-A router-based DHCP server will provide dynamic IP addresses for all devices in Building A. Switches will be configured to support VLAN tagging and inter-VLAN communication.
-
 Building B: Faculty of Engineering and Computing, Faculty of Art and Design
 
-Network Configuration:
-
-VLANs:
+Network VLANs:
 
 VLAN 50: Faculty of Engineering and Computing
 
 VLAN 60: Faculty of Art and Design
 
-Separate IP networks will be assigned to each faculty.Switches will be configured with VLANs for traffic segmentation.
-
 Building C: Student Labs and IT Department
 
-Network Configuration:
-VLANs:
+Network VLANs:
 
 VLAN 70: Student Labs
 
 VLAN 80: IT Department
+
+Smaller Campus: Faculty of Health and Sciences
+
+Network VLAN:
+
+VLAN 90: Staff Lab
+
+VLAN 100: Student Lab
+
+A router-based DHCP server will provide dynamic IP addresses for all devices in Building A. Switches will be configured to support VLAN tagging and inter-VLAN communication.
 
 The IT department will host critical servers, including the university web server and other internal servers. Port security will be configured on the switches to prevent unauthorized access to the servers.
 
 External Email Server
 The university’s email server is hosted externally in the cloud. A static route will be configured on the main campus router to communicate with the cloud-hosted email server.
 
-Smaller Campus: Faculty of Health and Sciences
-
-Network Configuration:
-
-VLAN 90: Staff Lab
-
-VLAN 100: Student Lab
 
 VLANs will be created for each department within the Faculty of Health and Sciences. Separate IP networks will be assigned to each department. The smaller campus router will use RIPV2 for routing internal traffic and static routing for communication with the main campus and the external email server.
 
@@ -103,6 +99,32 @@ This ensures efficient route updates and supports scalability for future expansi
 Static Routing for External Communication
 A static route will be set up on both campus routers to facilitate communication with the cloud-hosted email server.
 
+Configurations:
+
+On both routers RIP was configureed for their respective VLANS.
+
+Router> enable
+
+Router# configure terminal
+
+Router(config)# router rip
+
+Router(config-router)# version 2
+
+Router(config-router)# no auto-summary
+
+Router(config-router)# network ip address of respective VLAN
+
+Router(config-router)# exit
+
+Static routes are configured to direct traffic destined for the cloud-hosted email server via the internet gateway.
+
+These static configurations to direct traffic destined for the cloud hosted-hosted email server.
+
+Router(config)# ip route 20.0.0.0 255.255.255.252 10.10.10.1
+
+Router(config)# ip route 20.0.0.0 255.255.255.252 10.10.10.2
+
 
 </p>
 <br />
@@ -120,7 +142,24 @@ VLAN tagging and trunking will be configured to ensure inter-VLAN communication 
 Port security will be implemented to:
 Limit the number of MAC addresses per port.
 Prevent unauthorized devices from accessing the network.
-Access Control Lists (ACLs) will be used to restrict traffic to specific VLANs and sensitive servers.
+
+Configurations: ON Multilayer switch
+
+Switch(config)# interface respective interface
+
+Switch(config-if)# switchport mode access
+
+Switch(config-if)# switchport access respective VLAN
+
+Switch(config-if)# switchport port-security
+
+Switch(config-if)# switchport port-security maximum 1
+
+Switch(config-if)# switchport port-security violation shutdown
+
+Switch(config-if)# switchport port-security mac-address sticky
+
+Switch(config-if)# exit
 
 </p>
 <br /></p>
