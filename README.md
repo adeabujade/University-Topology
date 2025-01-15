@@ -29,6 +29,10 @@ This report outlines the design and implementation of a network topology to supp
 </p>
 <p>
 <h2>1. Network Topology</h2>
+
+![image](https://github.com/user-attachments/assets/19edbb68-332c-4787-9952-e0efb0b3f4e1)
+
+
 Building A: Administrative Staff and Faculty of Business
   
 Departments: Management, HR, Finance, and the Faculty of Business.
@@ -63,6 +67,9 @@ VLAN 70: Student Labs
 
 VLAN 80: IT Department
 
+![image](https://github.com/user-attachments/assets/0636ba53-bf6a-4cf3-b0d4-4a1264295489)
+
+
 Smaller Campus: Faculty of Health and Sciences
 
 Network VLAN:
@@ -71,13 +78,11 @@ VLAN 90: Staff Lab
 
 VLAN 100: Student Lab
 
-A router-based DHCP server will provide dynamic IP addresses for all devices in Building A. Switches will be configured to support VLAN tagging and inter-VLAN communication.
+![image](https://github.com/user-attachments/assets/27ae2b76-3018-4d34-93b1-7e913b802b96)
+
+A router-based DHCP server will provide dynamic IP addresses for all devices in Building A. Switches will be configured to support VLAN tagging and inter-VLAN communication. 
 
 The IT department will host critical servers, including the university web server and other internal servers. Port security will be configured on the switches to prevent unauthorized access to the servers.
-
-External Email Server
-The university’s email server is hosted externally in the cloud. A static route will be configured on the main campus router to communicate with the cloud-hosted email server.
-
 
 VLANs will be created for each department within the Faculty of Health and Sciences. Separate IP networks will be assigned to each department. The smaller campus router will use RIPV2 for routing internal traffic and static routing for communication with the main campus and the external email server.
 
@@ -99,6 +104,28 @@ This ensures efficient route updates and supports scalability for future expansi
 Static Routing for External Communication
 A static route will be set up on both campus routers to facilitate communication with the cloud-hosted email server.
 
+Each VLAN will have a unique subnet to ensure efficient IP allocation and avoid conflicts. 
+
+VLAN 10: 192.168.1.0/24 (Management)
+
+VLAN 20: 192.168.2.0/24 (HR)
+
+VLAN 30: 192.168.3.0/24 (Finance)
+
+VLAN 40: 192.168.4.0/24 (Faculty of Business)
+
+VLAN 50: 192.168.5.0/24 (Faculty of Engineering and Computing)
+
+VLAN 60: 192.168.6.0/24 (Faculty of Art and Design)
+
+VLAN 70: 192.168.7.0/24 (Student Labs)
+
+VLAN 80: 192.168.8.0/24 (IT Department)
+
+VLAN 90: 192.168.9.0/24 (Staff Lab)
+
+VLAN 100: 192.168.10.0/24 (Student Lab)
+
 Configurations:
 
 On both routers RIP was configureed for their respective VLANS.
@@ -117,13 +144,25 @@ Router(config-router)# network ip address of respective VLAN
 
 Router(config-router)# exit
 
-Static routes are configured to direct traffic destined for the cloud-hosted email server via the internet gateway.
+<h2>IP Route Tables</h2>
 
-These static configurations to direct traffic destined for the cloud hosted-hosted email server.
+Cloud Router
 
-Router(config)# ip route 20.0.0.0 255.255.255.252 10.10.10.1
+![image](https://github.com/user-attachments/assets/c7dedc7e-e98f-405f-b0d2-bc1986ad4656)
 
-Router(config)# ip route 20.0.0.0 255.255.255.252 10.10.10.2
+Router0
+
+![image](https://github.com/user-attachments/assets/758c998b-17dc-4075-a99f-721fcdfe82fd)
+
+Router1
+
+![image](https://github.com/user-attachments/assets/a2a44421-3657-4f0d-88d1-f7bfb29524e3)
+
+-Inter-VLAN communication will be verified using ping tests between devices in different VLANs.
+
+In this ping, PC3 from the business VLAN 40 from the main campus is pinging PC8 from the Staff VLAN 90 from the branch campus.
+
+![image](https://github.com/user-attachments/assets/32ca9c7d-669d-450b-9ec5-f2ff9c6f0972)
 
 
 </p>
@@ -160,65 +199,7 @@ Switch(config-if)# switchport port-security violation shutdown
 Switch(config-if)# switchport port-security mac-address sticky
 
 Switch(config-if)# exit
-
-</p>
-<br /></p>
-<br />
-
-<p>
-
-</p>
-<p>
-<h2>5. IP Addressing Plan</h2>
   
-Each VLAN will have a unique subnet to ensure efficient IP allocation and avoid conflicts. 
-
-For example:
-
-VLAN 10: 192.168.1.0/24 (Management)
-
-VLAN 20: 192.168.2.0/24 (HR)
-
-VLAN 30: 192.168.3.0/24 (Finance)
-
-VLAN 40: 192.168.4.0/24 (Faculty of Business)
-
-VLAN 50: 192.168.5.0/24 (Faculty of Engineering and Computing)
-
-VLAN 60: 192.168.6.0/24 (Faculty of Art and Design)
-
-VLAN 70: 192.168.7.0/24 (Student Labs)
-
-VLAN 80: 192.168.8.0/24 (IT Department)
-
-VLAN 90: 192.168.9.0/24 (Staff Lab)
-
-VLAN 100: 192.168.10.0/24 (Student Lab)
-
-</p>
-<br /></p>
-<br />
-
-<p>
-
-</p>
-<p>
-<h2>6. Testing and Verification</h2>
-  
--DHCP functionality will be tested in Building A to ensure devices acquire dynamic IP addresses correctly.
--Inter-VLAN communication will be verified using ping tests between devices in different VLANs.
--RIPV2 routes will be checked using the show ip route command on routers.
--Static routes to the external email server will be tested by accessing the server from a test device.
--Port security will be tested by attempting to connect unauthorized devices to secure ports.
-
-
-
-</p>
-<br /></p>
-<br /></p>
-<br />
-
-<p>
 
 </p>
 <p>
